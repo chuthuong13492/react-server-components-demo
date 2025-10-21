@@ -1,139 +1,208 @@
 # React Server Components Demo
 
-* [What is this?](#what-is-this)
-* [When will I be able to use this?](#when-will-i-be-able-to-use-this)
-* [Should I use this demo for benchmarks?](#should-i-use-this-demo-for-benchmarks)
-* [Setup](#setup)
-* [DB Setup](#db-setup)
-  + [Step 1. Create the Database](#step-1-create-the-database)
-  + [Step 2. Connect to the Database](#step-2-connect-to-the-database)
-  + [Step 3. Run the seed script](#step-3-run-the-seed-script)
-* [Notes about this app](#notes-about-this-app)
-  + [Interesting things to try](#interesting-things-to-try)
-* [Built by (A-Z)](#built-by-a-z)
-* [Code of Conduct](#code-of-conduct)
-* [License](#license)
+A comprehensive demonstration of React Server Components - an experimental React feature that allows components to run on the server and send their output to the client. This project showcases the power of Server Components through a fully functional note-taking application.
 
-## What is this?
+## 📋 Table of Contents
 
-This is a demo app built with Server Components, an experimental React feature. **We strongly recommend [watching our talk introducing Server Components](https://reactjs.org/server-components) before exploring this demo.** The talk includes a walkthrough of the demo code and highlights key points of how Server Components work and what features they provide.
+* [🚀 What is this?](#-what-is-this)
+* [⚠️ Important Notes](#️-important-notes)
+* [🛠️ Prerequisites](#️-prerequisites)
+* [⚡ Quick Start](#-quick-start)
+* [🏗️ Project Structure](#️-project-structure)
+* [🎯 Features](#-features)
+* [🔧 Development](#-development)
+* [📚 Learning Resources](#-learning-resources)
+* [🤝 Contributing](#-contributing)
+* [📄 License](#-license)
 
-**Update (March 2023):** This demo has been updated to match the [latest conventions](https://react.dev/blog/2023/03/22/react-labs-what-we-have-been-working-on-march-2023#react-server-components).
+## 🚀 What is this?
 
-## When will I be able to use this?
+This is a **React Notes** application built with **React Server Components** - an experimental React feature that enables components to execute on the server and stream their results to the client. This approach offers several advantages:
 
-Server Components are an experimental feature and **are not ready for adoption**. For now, we recommend experimenting with Server Components via this demo app. **Use this in your projects at your own risk.**
+- **Reduced Bundle Size**: Server components don't ship JavaScript to the client
+- **Direct Database Access**: Server components can directly access databases and APIs
+- **Better Performance**: Reduced client-side JavaScript execution
+- **Enhanced Security**: Sensitive operations stay on the server
 
-## Should I use this demo for benchmarks?
+**🎥 Recommended**: Watch the [official React Server Components talk](https://reactjs.org/server-components) before exploring this demo for a comprehensive understanding.
 
-If you use this demo to compare React Server Components to the framework of your choice, keep this in mind:
+**📅 Latest Update (March 2023)**: This demo has been updated to match the [latest React Server Components conventions](https://react.dev/blog/2023/03/22/react-labs-what-we-have-been-working-on-march-2023#react-server-components).
 
-* **This demo doesn’t have server rendering.** Server Components are a separate (but complementary) technology from Server Rendering (SSR). Server Components let you run some of your components purely on the server. SSR, on the other hand, lets you generate HTML before any JavaScript loads. This demo *only* shows Server Components, and not SSR. Because it doesn't have SSR, the initial page load in this demo has a client-server network waterfall, and **will be much slower than any SSR framework**. However, Server Components are meant to be integrated together with SSR, and they *will* be in a future release.
-* **This demo doesn’t have an efficient bundling strategy.** When you use Server Components, a bundler plugin will automatically split the client JS bundle. However, the way it's currently being split is not necessarily optimal. We are investigating more efficient ways to split the bundles, but they are out of scope of this demo.
-* **This demo doesn’t have partial refetching.** Currently, when you click on different “notes”, the entire app shell is refetched from the server. However, that’s not ideal: for example, it’s unnecessary to refetch the sidebar content if all that changed is the inner content of the right pane. Partial refetching is an [open area of research](https://github.com/reactjs/rfcs/blob/main/text/0188-server-components.md#open-areas-of-research) and we don’t yet know how exactly it will work.
+## ⚠️ Important Notes
 
-This demo is provided “as is” to show the parts that are ready for experimentation. It is not intended to reflect the performance characteristics of a real app driven by a future stable release of Server Components.
+### Experimental Status
+Server Components are **experimental** and not ready for production use. This demo is for learning and experimentation purposes only.
 
-## Setup
+### Performance Considerations
+If you're comparing React Server Components to other frameworks, keep in mind:
 
-You will need to have [Node 18 LTS](https://nodejs.org/en) in order to run this demo. (If you use `nvm`, run `nvm i` before running `npm install` to install the recommended Node version.)
+- **No Server-Side Rendering (SSR)**: This demo only shows Server Components, not SSR
+- **Initial Load Performance**: Without SSR, there's a client-server network waterfall on first load
+- **Bundle Optimization**: Current bundling strategy is not optimized for production
+- **Partial Refetching**: Currently refetches the entire app shell when navigating
 
-  ```
-  npm install --legacy-peer-deps
-  npm start
-  ```
+This demo showcases the core concepts but doesn't represent production performance characteristics.
 
-(Or `npm run start:prod` for a production build.)
+## 🛠️ Prerequisites
 
-Then open http://localhost:4000.
+Before you begin, ensure you have the following installed:
 
-The app won't work until you set up the database, as described below.
+- **[Node.js 18 LTS](https://nodejs.org/en)** or higher
+- **Git** (for cloning the repository)
 
-<details>
-  <summary>Setup with Docker (optional)</summary>
-  <p>You can also start dev build of the app by using docker-compose.</p>
-  <p>⚠️ This is <b>completely optional,</b> and is only for people who <i>prefer</i> Docker to global installs!</p>
-  <p>If you prefer Docker, make sure you have docker and docker-compose installed then run:</p>
-  <pre><code>docker-compose up</code></pre>
-  <h4>Running seed script</h4>
-  <p>1. Run containers in the detached mode</p>
-  <pre><code>docker-compose up -d</code></pre>
-  <p>2. Run seed script</p>
-  <pre><code>docker-compose exec notes-app npm run seed</code></pre>
-  <p>If you'd rather not use Docker, skip this section and continue below.</p>
-</details>
+If you use `nvm`, run `nvm i` to install the recommended Node version.
 
-## DB Setup
+## ⚡ Quick Start
 
-This demo uses Postgres. First, follow its [installation link](https://wiki.postgresql.org/wiki/Detailed_installation_guides) for your platform.
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/chuthuong13492/react-server-components-demo.git
+   cd react-server-components-demo
+   ```
 
-Alternatively, you can check out this [fork](https://github.com/pomber/server-components-demo/) which will let you run the demo app without needing a database. However, you won't be able to execute SQL queries (but fetch should still work). There is also [another fork](https://github.com/prisma/server-components-demo) that uses Prisma with SQLite, so it doesn't require additional setup.
+2. **Install dependencies**
+   ```bash
+   npm install --legacy-peer-deps
+   ```
 
-The below example will set up the database for this app, assuming that you have a UNIX-like platform:
+3. **Start the development server**
+   ```bash
+   npm start
+   ```
 
-### Step 1. Create the Database
+4. **Open your browser**
+   Navigate to [http://localhost:4000](http://localhost:4000)
 
-```
-psql postgres
-
-CREATE DATABASE notesapi;
-CREATE ROLE notesadmin WITH LOGIN PASSWORD 'password';
-ALTER ROLE notesadmin WITH SUPERUSER;
-ALTER DATABASE notesapi OWNER TO notesadmin;
-\q
+### Production Build
+For a production build, use:
+```bash
+npm run start:prod
 ```
 
-### Step 2. Connect to the Database
+### Docker Setup (Optional)
+If you prefer Docker, you can use the provided docker-compose setup:
 
-```
-psql -d postgres -U notesadmin;
+```bash
+# Start the application
+docker-compose up
 
-\c notesapi
+# Or run in detached mode
+docker-compose up -d
 
-DROP TABLE IF EXISTS notes;
-CREATE TABLE notes (
-  id SERIAL PRIMARY KEY,
-  created_at TIMESTAMP NOT NULL,
-  updated_at TIMESTAMP NOT NULL,
-  title TEXT,
-  body TEXT
-);
-
-\q
+# (Optional) Other docker-compose commands can be added as needed
 ```
 
-### Step 3. Run the seed script
+⚠️ **Note**: Docker setup is completely optional and only for those who prefer Docker over global installs.
 
-Finally, run `npm run seed` to populate some data.
 
-And you're done!
 
-## Notes about this app
+## 🏗️ Project Structure
 
-The demo is a note-taking app called **React Notes**. It consists of a few major parts:
+The **React Notes** application consists of several key components:
 
-- It uses a Webpack plugin (not defined in this repo) that allows us to only include client components in build artifacts
-- An Express server that:
-  - Serves API endpoints used in the app
-  - Renders Server Components into a special format that we can read on the client
-- A React app containing Server and Client components used to build React Notes
+```
+src/
+├── framework/           # Core framework files
+│   ├── bootstrap.js     # Application bootstrap
+│   └── router.js        # Client-side routing
+├── store/              # Redux store configuration
+│   ├── hooks.js        # Redux hooks
+│   ├── index.js        # Store setup
+│   └── slices/         # Redux slices
+├── types/              # TypeScript definitions
+└── *.js                # React components
 
-This demo is built on top of our Webpack plugin, but this is not how we envision using Server Components when they are stable. They are intended to be used in a framework that supports server rendering — for example, in Next.js. This is an early demo -- the real integration will be developed in the coming months. Learn more in the [announcement post](https://reactjs.org/server-components).
+server/
+└── api.server.js       # Express server with API endpoints
 
-### Interesting things to try
+public/                 # Static assets
+scripts/
+└── build.js           # Build configuration
+```
 
-- Expand note(s) by hovering over the note in the sidebar, and clicking the expand/collapse toggle. Next, create or delete a note. What happens to the expanded notes?
-- Change a note's title while editing, and notice how editing an existing item animates in the sidebar. What happens if you edit a note in the middle of the list?
-- Search for any title. With the search text still in the search input, create a new note with a title matching the search text. What happens?
-- Search while on Slow 3G, observe the inline loading indicator.
-- Switch between two notes back and forth. Observe we don't send new responses next time we switch them again.
-- Uncomment the `await fetch('http://localhost:4000/sleep/....')` call in `Note.js` or `NoteList.js` to introduce an artificial delay and trigger Suspense.
-  - If you only uncomment it in `Note.js`, you'll see the fallback every time you open a note.
-  - If you only uncomment it in `NoteList.js`, you'll see the list fallback on first page load.
-  - If you uncomment it in both, it won't be very interesting because we have nothing new to show until they both respond.
-- Add a new Server Component and place it above the search bar in `App.js`. Import `db` from `db.js` and use `await db.query()` from it to get the number of notes. Oberserve what happens when you add or delete a note.
+### Architecture Overview
 
-You can watch a [recorded walkthrough of all these demo points here](https://youtu.be/La4agIEgoNg?t=600) with timestamps. (**Note:** this recording is slightly outdated because the repository has been updated to match the [latest conventions](https://react.dev/blog/2023/03/22/react-labs-what-we-have-been-working-on-march-2023#react-server-components).)
+- **Webpack Plugin**: Automatically splits client components in build artifacts
+- **Express Server**: 
+  - Serves API endpoints
+  - Renders Server Components into special format for client consumption
+- **React App**: Mix of Server and Client components building the React Notes interface
+
+## 🎯 Features
+
+- ✅ **Note Management**: Create, edit, delete, and search notes
+- ✅ **Real-time Updates**: Live updates when notes are modified
+- ✅ **Search Functionality**: Search through note titles and content
+- ✅ **Responsive Design**: Works on desktop and mobile devices
+- ✅ **Server Components**: Demonstrates server-side component execution
+- ✅ **Client Components**: Shows client-side interactivity
+- ✅ **Redux Integration**: State management with Redux Toolkit
+- ✅ **Suspense Support**: Loading states and error boundaries
+
+## 🔧 Development
+
+### Available Scripts
+
+- `npm start` - Start development server
+- `npm run start:prod` - Start production build
+- `npm run build` - Build the application
+
+### Interesting Things to Try
+
+🎯 **Interactive Experiments**:
+
+1. **Note Expansion**: Hover over notes in the sidebar and click expand/collapse. Create or delete notes and observe what happens to expanded notes.
+
+2. **Live Editing**: Change a note's title while editing and watch the sidebar animation. Try editing notes in the middle of the list.
+
+3. **Search Behavior**: Search for any title, then create a new note with a matching title. Observe the search results update.
+
+4. **Network Simulation**: Test on Slow 3G to see the inline loading indicators in action.
+
+5. **Navigation Caching**: Switch between two notes back and forth. Notice that responses aren't sent again on subsequent switches.
+
+6. **Suspense Testing**: Uncomment the `await fetch('http://localhost:4000/sleep/....')` calls in `Note.js` or `NoteList.js` to trigger Suspense:
+   - Only in `Note.js`: Fallback appears every time you open a note
+   - Only in `NoteList.js`: List fallback on first page load
+   - In both: Less interesting as both need to respond
+
+7. **Server Component Demo**: Add a new Server Component above the search bar in `App.js` that renders some server-only data or markup. Observe how the UI updates when you add or delete notes.
+
+📺 **Video Walkthrough**: Watch a [recorded demonstration](https://youtu.be/La4agIEgoNg?t=600) of all these features with timestamps.
+
+### Future Integration
+
+This demo uses a custom Webpack plugin, but Server Components are intended for integration with frameworks that support server rendering (like Next.js). The real integration will be developed in the coming months.
+
+## 📚 Learning Resources
+
+### Official Documentation
+- [React Server Components Announcement](https://reactjs.org/server-components)
+- [React Labs Updates](https://react.dev/blog/2023/03/22/react-labs-what-we-have-been-working-on-march-2023#react-server-components)
+- [Server Components RFC](https://github.com/reactjs/rfcs/blob/main/text/0188-server-components.md)
+
+### Video Content
+- [Official React Server Components Talk](https://reactjs.org/server-components)
+- [Demo Walkthrough with Timestamps](https://youtu.be/La4agIEgoNg?t=600)
+
+### Related Projects
+- [Next.js App Router](https://nextjs.org/docs/app) - Production-ready Server Components implementation
+- [React Server Components RFC](https://github.com/reactjs/rfcs/blob/main/text/0188-server-components.md) - Technical specification
+
+## 🤝 Contributing
+
+This is an experimental demo project. While contributions are welcome, please note:
+
+- This is a **learning and experimentation** project
+- Server Components are still **experimental** and not production-ready
+- Focus on **educational value** and **demonstration** rather than production features
+
+### Development Guidelines
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
 ## Built by (A-Z)
 
@@ -144,8 +213,10 @@ You can watch a [recorded walkthrough of all these demo points here](https://you
 - [Sebastian Markbåge](https://twitter.com/sebmarkbage)
 - [Tate Strickland](http://www.tatestrickland.com/) (Design)
 
-## [Code of Conduct](https://engineering.fb.com/codeofconduct/)
-Facebook has adopted a Code of Conduct that we expect project participants to adhere to. Please read the [full text](https://engineering.fb.com/codeofconduct/) so that you can understand what actions will and will not be tolerated.
+## 📄 License
 
-## License
-This demo is MIT licensed.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+**⚠️ Disclaimer**: This is an experimental demo showcasing React Server Components. Use at your own risk and do not use in production environments.
